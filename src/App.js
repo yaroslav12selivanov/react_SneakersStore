@@ -2,12 +2,12 @@ import Card from "./components/Card";
 import Header from "./components/Header";
 import Drawer from "./components/Drawer";
 
-// const productArr = [
-//     {productTitle: "Мужские Кроссовки Nike Air Max 270", priceProduct: "12 990 руб."},
-//     {productTitle: "Мужские Кроссовки Nike Blazer Mid Suede", priceProduct: "10 500 руб."},
-//     {productTitle: "Кроссовки Puma X Aka Boku Future Rider", priceProduct: "8 999 руб."},
-//     {productTitle: "Кроссовки Puma X Aka Boku Future Rider", priceProduct: "8 999 руб."},
-// ]
+const arr = [
+    {title: "Кроссовки Puma X Aka Boku Future Rider", price: "7.890", imageURL: "/images/jpg/puma-x-aka.jpg"},
+    {title: "Мужские Кроссовки Nike Blazer Mid Suede", price: "12.900", imageURL: "/images/jpg/nike-blazer.jpg"},
+    {title: "Мужские Кроссовки Nike Blazer Mid Suede", price: "12.000", imageURL: "/images/jpg/nike-blazer-2.jpg"},
+    {title: "Мужские Кроссовки Nike Lebron XVIII Low", price: "13.999", imageURL: "/images/jpg/nike-lebron.jpg"},
+];
 
 export default function App() {
     return (
@@ -27,16 +27,14 @@ export default function App() {
                     </div>
                 </div>
                 <div className="sneakers d-flex flex-wrap">
-                    <Card
-                        title="Мужские Кроссовки Nike Air Max 270"
-                        price={14560}
-                        imageURL="/images/jpg/nike-air-max.jpg"
-                    />
-                    <Card
-                        title="Мужские Кроссовки Nike Air Max 270"
-                        price={14560}
-                        imageURL="/images/jpg/nike-air-max.jpg"
-                    />
+                    {arr.map((obj) => (
+                        <Card
+                            title={obj.title}
+                            price={obj.price}
+                            imageURL={obj.imageURL}
+                            onCkick={() => console.log(obj)}
+                        />
+                    ))}
                 </div>
             </div>
         </div>
