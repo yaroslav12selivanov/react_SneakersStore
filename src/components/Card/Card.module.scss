@@ -1,0 +1,35 @@
+.card {
+  border: 1px solid #F3F3F3;
+  border-radius: 40px;
+  padding: 20px;
+  width: 210px;
+  transition: 0.3s ease-in-out;
+
+  .plusButton {
+    cursor: pointer;
+    transition: 0.3s ease-in-out;
+
+    .plusButton:hover {
+      opacity: 0.5;
+    }
+  }
+
+  &:hover {
+    box-shadow: 0px 14px 30px rgba(0, 0, 0, 0.05);
+    transform: translateY(-10px);
+  }
+
+  .favorite {
+    position: absolute;
+    cursor: pointer;
+  }
+
+  span {
+    font-size: 14px;
+  }
+
+  h5 {
+    font-weight: 400;
+    font-size: 14px;
+  }
+}

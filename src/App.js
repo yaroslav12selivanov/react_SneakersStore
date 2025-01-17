@@ -1,25 +1,41 @@
 import Card from "./components/Card";
 import Header from "./components/Header";
 import Drawer from "./components/Drawer";
-
-const arr = [
-    {title: "Кроссовки Puma X Aka Boku Future Rider", price: "7.890", imageURL: "/images/jpg/puma-x-aka.jpg"},
-    {title: "Мужские Кроссовки Nike Blazer Mid Suede", price: "12.900", imageURL: "/images/jpg/nike-blazer.jpg"},
-    {title: "Мужские Кроссовки Nike Blazer Mid Suede", price: "12.000", imageURL: "/images/jpg/nike-blazer-2.jpg"},
-    {title: "Мужские Кроссовки Nike Lebron XVIII Low", price: "13.999", imageURL: "/images/jpg/nike-lebron.jpg"},
-];
+import React, {useState} from "react";
 
 export default function App() {
+    const [items, setItems] = useState([]);
+    const [cartItems, setCartItems] = useState([]);
+    const [cartOpened, setCartOpened] = useState(false);
+
+    React.useEffect(() => {
+        fetch("https://678a5b1bdd587da7ac29cb6c.mockapi.io/items").then(res => {
+            return res.json();
+        }).then(json => {
+            setItems(json);
+        });
+    }, []);
+
+    const onAddToCart = (obj) => {
+        setCartItems((prev) => {
+            const itemExists = prev.some(item => item.id === obj.id);
+
+            if (itemExists) {
+                return prev.filter(item => item.id !== obj.id);
+            } else {
+                return [...prev, obj];
+            }
+        });
+    };
+
     return (
         <div className="wrapper clear">
-            <div style={{
-                display: "none",
-            }} className="overlay">
-                <Drawer />
-            </div>
-            <Header />
+            { cartOpened ? <Drawer items={cartItems} onClose={() => setCartOpened(false)} /> : null }
+            <Header
+                onClickCart={() => setCartOpened(true)}
+            />
             <div className="content p-40">
-                <div className="d-flex align-center justify-between">
+                <div className="d-flex align-center justify-between mb-40">
                     <h1>Все кроссовки</h1>
                     <div className="search-block d-flex align-center">
                         <img src="/images/svg/search.svg" alt="search input"/>
@@ -27,12 +43,13 @@ export default function App() {
                     </div>
                 </div>
                 <div className="sneakers d-flex flex-wrap">
-                    {arr.map((obj) => (
+                    {items.map((item) => (
                         <Card
-                            title={obj.title}
-                            price={obj.price}
-                            imageURL={obj.imageURL}
-                            onCkick={() => console.log(obj)}
+                            title={item.title}
+                            price={item.price}
+                            imageURL={item.imageURL}
+                            onFavorite={() => console.log("Вы добавили в закладки")}
+                            onPlus={(obj) => onAddToCart(obj)}
                         />
                     ))}
                 </div>
