@@ -6,8 +6,9 @@ import React, {useState} from "react";
 
 export default function App() {
     const [items, setItems] = useState([]);
-    const [searchValue, setSearchValue] = useState('');
     const [cartItems, setCartItems] = useState([]);
+    const [favorites, setFavorites] = useState([]);
+    const [searchValue, setSearchValue] = useState('');
     const [cartOpened, setCartOpened] = useState(false);
 
     React.useEffect(() => {
@@ -22,6 +23,11 @@ export default function App() {
     const onAddToCart = (obj) => {
         axios.post("https://678a5b1bdd587da7ac29cb6c.mockapi.io/Cart", obj);
         setCartItems((prev) => [...prev, obj]);
+    };
+
+    const onAddToFavorite = (obj) => {
+        axios.post("https://678a5b1bdd587da7ac29cb6c.mockapi.io/items", obj);
+        setFavorites((prev) => [...prev, obj]);
     };
 
     const onRemoveItem = async (id) => {
