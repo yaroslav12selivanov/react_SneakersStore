@@ -27,7 +27,7 @@ export default function App() {
     };
 
     const onAddToFavorite = (obj) => {
-        axios.post("https://678a5b1bdd587da7ac29cb6c.mockapi.io/items", obj);
+        axios.post("https://6790f9bbaf8442fd73788b3d.mockapi.io/favorite", obj);
         setFavorites((prev) => [...prev, obj]);
     };
 
@@ -79,7 +79,7 @@ export default function App() {
                             title={item.title}
                             price={item.price}
                             imageURL={item.imageURL}
-                            onFavorite={() => console.log("Вы добавили в закладки")}
+                            onFavorite={(obj) => onAddToFavorite(obj)}
                             onPlus={(obj) => onAddToCart(obj)}
                         />
                     ))}
