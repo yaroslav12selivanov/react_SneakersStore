@@ -1,9 +1,12 @@
-import Card from "./components/Card";
+// import Card from "./components/Card";
 import { Route, Routes } from "react-router-dom";
 import axios from "axios";
 import Header from "./components/Header";
 import Drawer from "./components/Drawer";
-import React, {useState} from "react";
+import React, { useState } from "react";
+import Home from "./components/pages/Home"
+import Favorites from "./components/pages/Favorites"
+
 
 export default function App() {
     const [items, setItems] = useState([]);
@@ -22,13 +25,25 @@ export default function App() {
     }, []);
 
     const onAddToCart = (obj) => {
-        axios.post("https://678a5b1bdd587da7ac29cb6c.mockapi.io/Cart", obj);
-        setCartItems((prev) => [...prev, obj]);
+        if (cartItems.find((item) => Number(item.obj) === Number(obj.id))) {
+            setCartItems(prev => prev.filter(item => Number(item.id) !== Number(obj.id)));
+        } else {
+            axios.post("https://678a5b1bdd587da7ac29cb6c.mockapi.io/Cart", obj);
+            setCartItems((prev) => [...prev, obj]);
+        }
     };
 
-    const onAddToFavorite = (obj) => {
-        axios.post("https://6790f9bbaf8442fd73788b3d.mockapi.io/favorite", obj);
-        setFavorites((prev) => [...prev, obj]);
+    const onAddToFavorite = async (obj) => {
+        try {
+            if (favorites.find((favObj) => favObj.id === obj.id)) {
+                axios.delete(`/favorites/${obj.id}`);
+            } else {
+                const { data } = await axios.post("/favorites", obj);
+                setFavorites((prev) => [...prev, obj]);
+            }
+        } catch (error) {
+            alert("Не удалось добавить товар в фавориты")
+        }
     };
 
     const onRemoveItem = async (id) => {
@@ -46,45 +61,28 @@ export default function App() {
 
     return (
         <div className="wrapper clear">
-            { cartOpened ? <Drawer items={cartItems} onClose={() => setCartOpened(false)} onRemove={onRemoveItem}/> : null }
-            <Header
-                onClickCart={() => setCartOpened(true)}
-            />
+            {cartOpened ? <Drawer items={cartItems} onClose={() => setCartOpened(false)} onRemove={onRemoveItem} /> : null}
+
+            <Header onClick={() => setCartOpened(true)} />
 
             <Routes>
-                <Route path="/favorites" element={<h1>Test message for test page</h1>} />
-                {/* Add other routes here */}
+                <Route path="/" exact element={<Home
+                    items={items}
+                    searchValue={searchValue}
+                    setSearchValue={setSearchValue}
+                    onChangeSearchInput={onChangeSearchInput}
+                    onAddToFavorite={onAddToFavorite}
+                    onAddToCart={onAddToCart}
+                />} />
             </Routes>
 
-            <div className="content p-40">
-                <div className="d-flex align-center justify-between mb-40">
-                    <h1>{ searchValue ? `Поиск по запросу: ${searchValue}` : "Все кроссовки" }</h1>
-                    <div className="search-block d-flex align-center">
-                        <img src="/images/svg/search.svg" alt="search input"/>
-                        <input onChange={onChangeSearchInput} value={searchValue} type="text" placeholder="Поиск..."/>
-                        {searchValue && (
-                            <img
-                                onClick={() => setSearchValue('')}
-                                className="cu-p"
-                                src="/images/svg/close-hover-button.svg"
-                                alt="clear button"
-                            />
-                        )}
-                    </div>
-                </div>
-                <div className="sneakers d-flex flex-wrap">
-                    {items.filter(item => item.title.includes(searchValue.toLowerCase())).map((item, index) => (
-                        <Card
-                            key={index}
-                            title={item.title}
-                            price={item.price}
-                            imageURL={item.imageURL}
-                            onFavorite={(obj) => onAddToFavorite(obj)}
-                            onPlus={(obj) => onAddToCart(obj)}
-                        />
-                    ))}
-                </div>
-            </div>
+            <Routes>
+                <Route path="/favorites" exact element={<Favorites
+                    items={favorites}
+                    onAddToFavorite={onAddToFavorite}
+                />} />
+            </Routes>
+
         </div>
     );
 }

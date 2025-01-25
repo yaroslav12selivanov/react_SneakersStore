@@ -1,12 +1,12 @@
 import cardStyles from "./Card.module.scss";
 import React, {useState} from "react";
 
-export default function Card({ onFavorite, price, title, imageURL, onPlus }) {
+export default function Card({ id, onFavorite, price, title, imageURL, onPlus, favorited=false }) {
     const [isAdded, setIsAdded] = React.useState(false);
-    const [isFavorite, setIsFavorite] = useState(false);
+    const [isFavorite, setIsFavorite] = useState(favorited);
 
     const onClickPlusHandle = () => {
-        onPlus({ title, imageURL, price });
+        onPlus({ id, title, imageURL, price });
         setIsAdded(!isAdded);
     }
 
