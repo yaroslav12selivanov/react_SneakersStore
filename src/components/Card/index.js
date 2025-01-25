@@ -11,6 +11,7 @@ export default function Card({ onFavorite, price, title, imageURL, onPlus }) {
     }
 
     const onClickFavorite = () => {
+        onFavorite({ title, imageURL, price });
         setIsFavorite(!isFavorite);
     }
 

@@ -1,4 +1,5 @@
 import Card from "./components/Card";
+import { Route, Routes } from "react-router-dom";
 import axios from "axios";
 import Header from "./components/Header";
 import Drawer from "./components/Drawer";
@@ -49,6 +50,12 @@ export default function App() {
             <Header
                 onClickCart={() => setCartOpened(true)}
             />
+
+            <Routes>
+                <Route path="/favorites" element={<h1>Test message for test page</h1>} />
+                {/* Add other routes here */}
+            </Routes>
+
             <div className="content p-40">
                 <div className="d-flex align-center justify-between mb-40">
                     <h1>{ searchValue ? `Поиск по запросу: ${searchValue}` : "Все кроссовки" }</h1>
